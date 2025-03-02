@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="grid grid-cols-4">
 <Card />
 </div>
 </template>

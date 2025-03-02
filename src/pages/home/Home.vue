@@ -2,8 +2,8 @@
 <div>
     <img class="" src="@/assets/icons/Sliders.svg" alt="">
     <div>
-<h1>Акции</h1>
-<div>
+    <div class="px-[116px] py-[80px]">
+    <h1 class="text-4xl font-bold mb-10 text-custom-black">Акции</h1>
 <CardList />
 </div>
     </div>

@@ -16,13 +16,25 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-  server: {
-    proxy: {
-      '/dapi': {
-        target: 'https://www.swiggy.com', 
-        changeOrigin: true,
-        secure: false,
-      }
-    }
-  }
+  build: {
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.names.some(name=>name.endsWith('.css'))) {
+            return 'assets/[name].[hash][extname]';
+          }
+          return 'assets/[name].[hash][extname]';
+        },
+      },
+    },
+  },
+  // server: {
+  //   proxy: {
+  //     '/dapi': {
+  //       target: 'https://www.swiggy.com', 
+  //       changeOrigin: true,
+  //       secure: false,
+  //     }
+  //   }
+  // }
 })

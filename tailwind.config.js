@@ -13,7 +13,7 @@ export default {
         'main-color': '#fbf8ec'
       },
       boxShadow:{
-      'input': '0 0 0 1px #70c05b',
+      'border': '0 0 0 1px #70c05b',
       },
     },
     screens:{

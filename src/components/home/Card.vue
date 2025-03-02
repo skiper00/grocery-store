@@ -1,34 +1,55 @@
 <template>
-<div class="bg-white">
-    <div>
-        <img src="@/assets/icons/DefaultImg.svg" alt="">
-    </div>
-    <div>
-        <h4>44,50 ₽</h4>
-    </div>
-    <div>
-        <p>Г/Ц Блинчики с мясом вес, Россия</p>
-    </div>
-    <div>
+    <div v-for="product in productStore.products" :key="product.id" class="bg-white rounded w-[272px] ">
+        <div class="relative">
+            <img class="w-[272px] h-[160px]" :src="product.image" alt="">
+            <svg class="absolute bottom-[120px] left-[230px] icon-heart" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g opacity="0.5">
+                    <rect width="32" height="32" rx="4" fill="#F3F2F1" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M16.7046 8.25632C17.8299 7.13054 19.3564 6.49805 20.9482 6.49805C22.5399 6.49805 24.0664 7.13051 25.1916 8.25624C26.3174 9.38152 26.95 10.9082 26.95 12.4999C26.95 14.0916 26.3175 15.6181 25.1917 16.7434C25.1917 16.7435 25.1917 16.7434 25.1917 16.7434L16.3517 25.5834C16.1565 25.7787 15.8399 25.7787 15.6446 25.5834L6.80461 16.7434C4.46096 14.3998 4.46096 10.6 6.80461 8.25632C9.14826 5.91267 12.9481 5.91267 15.2917 8.25632L15.9982 8.96277L16.7046 8.25632C16.7046 8.25629 16.7046 8.25635 16.7046 8.25632ZM20.9482 7.49805C19.6217 7.49805 18.3496 8.02515 17.4118 8.96334L16.3517 10.0234C16.258 10.1172 16.1308 10.1699 15.9982 10.1699C15.8656 10.1699 15.7384 10.1172 15.6446 10.0234L14.5846 8.96343C12.6315 7.0103 9.46484 7.0103 7.51172 8.96343C5.55859 10.9166 5.55859 14.0832 7.51172 16.0363L15.9982 24.5228L24.4846 16.0363C25.4228 15.0986 25.95 13.8264 25.95 12.4999C25.95 11.1734 25.4229 9.90126 24.4847 8.96351C23.5469 8.02532 22.2747 7.49805 20.9482 7.49805Z"
+                        fill="#414141" />
+                </g>
+            </svg>
 
-            <v-rating
-            half-increments
-            hover
-            readonly
-            :length="5"
-            :size="25"
-            :model-value="rating"
-            color="warning"
-            active-color="warning"
->
-</v-rating>
-
-</div>
-</div>
+        </div>
+        <div class="p-[8px]">
+            <div>
+                <h4 class="text-lg font-bold">{{ product.price }} ₽</h4>
+            </div>
+            <div>
+                <p class="leading-6 text-custom-black">{{ checkingTextLength(product.description) }}</p>
+            </div>
+            <div>
+                <v-rating half-increments readonly :length="5" :size="25" :model-value="product.rating" color="warning"
+                    active-color="warning" />
+            </div>
+            <button
+                class="shadow-border rounded-sm text-custom-green transition-all hover:bg-[#71c35c] hover:text-white py-2 w-full">В
+                корзину</button>
+        </div>
+    </div>
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue';
+import { computed } from 'vue';
+import { useStoreProducts } from '../../../store/products'
 
-const rating = ref(5);
+const productStore = useStoreProducts();
+
+
+
+const checkingTextLength = (text: string) => {
+    return text.length > 20 ? text.slice(0, 26) + '...' : text;
+}
 </script>
+
+<style lang="scss">
+
+
+.icon-heart:hover path {
+    fill: red; 
+}
+.icon-heart:hover rect {
+    fill: #ebeae9; 
+}
+</style>

@@ -18,10 +18,10 @@
           <input 
         type="text"
         placeholder="Найти товар" 
-        class="ml-4 py-2 px-2 w-[374px] md:w-[324px] rounded outline-none shadow-input" 
+        class="ml-4 py-2 px-2 w-[374px] md:w-[324px] rounded outline-none shadow-border" 
         />
         <img class="absolute right-1 top-1/4" src="@/assets/icons/search.svg" alt="">
-        </div>
+      </div>
         </div>
     
         <div class="flex items-center gap-4 ml-10">
@@ -50,7 +50,9 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+
+</script>
 
 <style lang="scss">
 // input {
