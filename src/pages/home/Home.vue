@@ -3,11 +3,11 @@
         <img class="w-full" src="@/assets/icons/Sliders.svg" alt="">
         <div class="px-[116px] py-[80px]">
             <div class="flex justify-between mb-10">
-                <h1 class="text-4xl font-bold text-custom-black">Акции</h1>
+                <h1 v-if="showCategoryName" class="text-4xl font-bold text-custom-black">Акции</h1>
                 <RouterLink class="ml-auto" to="/stocks">
                     <div class="flex items-center gap-5 cursor-pointer">
-                        <h5 class="text-[#606060]">Все акции</h5>
-                        <img class="-rotate-90" src="@/assets/icons/chevron-down.svg" alt="">
+                        <h5 v-if="showCategoryName" class="text-[#606060]">Все акции</h5>
+                        <img v-if="showCategoryName" class="-rotate-90" src="@/assets/icons/chevron-down.svg" alt="">
                     </div>
                 </RouterLink>
             </div>
@@ -17,36 +17,39 @@
             <div>
                 <!-- <v-skeleton-loader :elevation="5" theme="" type="card" height="301px" width="100%"></v-skeleton-loader>
             </div> -->
-            <div class="flex items-center mb-10">
-                <h1 class="text-4xl font-bold text-custom-black">Новинки</h1>
-                <RouterLink class="ml-auto" to="/newproducts">
-                    <div class="flex items-center gap-5 cursor-pointer">
-                        <h5 class="text-[#606060]">Все новинки</h5>
-                        <img class="-rotate-90" src="@/assets/icons/chevron-down.svg" alt="">
-                    </div>
-                </RouterLink>
-            </div>
-            <div v-if="storeProducts.newProducts.length > 0">
-                <CardList :products="storeProducts.newProducts" />
+                <div class="flex items-center mb-10">
+                    <h1 v-if="showCategoryName" class="text-4xl font-bold text-custom-black">Новинки</h1>
+                    <RouterLink class="ml-auto" to="/newproducts">
+                        <div class="flex items-center gap-5 cursor-pointer">
+                            <h5 v-if="showCategoryName" class="text-[#606060]">Все новинки</h5>
+                            <img v-if="showCategoryName" class="-rotate-90" src="@/assets/icons/chevron-down.svg" alt="">
+                        </div>
+                    </RouterLink>
+                </div>
+                <div v-if="storeProducts.newProducts.length > 0">
+                    <CardList :products="storeProducts.newProducts" />
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, onMounted, type Ref, ref } from 'vue';
-import CardList from '@/components/home/CardList.vue';
+import CardList from '@/components/home/Cads/CardList.vue';
 import type { ISProduct } from '../../../types/product';
 import { useStoreProducts } from '../../../store/products'
 
 const storeProducts = useStoreProducts();
+const showCategoryName = ref(false);
 
 onMounted(async () => {
     await storeProducts.loadProducts();
+    setTimeout(() => {
+        showCategoryName.value = true;
+    }, 50);
 })
 </script>
 
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

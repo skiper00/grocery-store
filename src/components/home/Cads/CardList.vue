@@ -10,8 +10,8 @@
 
 <script lang="ts" setup>
 import { defineProps, computed, onMounted, type PropType } from 'vue';
-import Card from '@/components/home/Card.vue';
-import type { ISProduct } from '../../../types/product';
+import Card from '@/components/home/Cads/Card.vue';
+import type { ISProduct } from '../../../../types/product';
 
 defineProps(({
     products:{

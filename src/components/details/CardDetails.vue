@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts" setup>
-import Loader from '@/loaders/Loader.vue';
+import Loader from '@/loaders/RatingLoader.vue';
 import { Icon as Iconify } from '@iconify/vue';
 import { onMounted, computed, watch } from 'vue';
 import { useStoreProducts } from '../../../store/products'

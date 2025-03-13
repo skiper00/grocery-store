@@ -43,7 +43,7 @@ export const useStoreProducts = defineStore("products", () => {
 
     const loadingProductById = async (id: string): Promise<void> => {
         try {
-            storeLoading.startLoading();
+            storeLoading.setLoading(true);
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
@@ -56,7 +56,7 @@ export const useStoreProducts = defineStore("products", () => {
         } catch (e) {
             console.error('Ошибка при получении товара', e)
         } finally {
-            storeLoading.stopLoading();
+            storeLoading.setLoading(false);
         }
     }
     return {

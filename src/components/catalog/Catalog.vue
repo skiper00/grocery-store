@@ -8,57 +8,14 @@
         <div class="wrapper">
             <h1 class="font-bold text-custom-black text-6xl mb-[60px]">Каталог</h1>
             <div class="container__grid">
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/DairyCat.svg" alt="">
-                    <p class="custom__text">Молоко, сыр, яйцо</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/BreadCat.svg" alt="">
-                    <p class="custom__text">Хлеб</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/FruitsAndVegetablesCat.svg" alt="">
-                    <p class="custom__text">Фрукты и овощи</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/FrozenFoodCat.svg" alt="">
-                    <p class="custom__text">Замороженные продукты</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/DrinksCat.svg" alt="">
-                    <p class="custom__text">Напитки</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/СonfectioneryCat.svg" alt="">
-                    <p class="custom__text">Кондитерские изделия</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/TeaAndCoffeeCat.svg" alt="">
-                    <p class="custom__text">Чай, кофе</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/GroceriesCat.svg" alt="">
-                    <p class="custom__text">Бакалея</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/HealthyEatingCat.svg" alt="">
-                    <p class="custom__text">Здоровое питание</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/PetSuppliesCat.svg" alt="">
-                    <p class="custom__text">Зоотовары</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/BabyFoodCat.svg" alt="">
-                    <p class="custom__text">Детское питание</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/MeatCat.svg" alt="">
-                    <p class="custom__text">Мясо, птица, колбаса</p>
-                </div>
-                <div class="category__card relative">
-                    <img src="@/assets/icons/categories/NonFoodProductsCat.svg" alt="">
-                    <p class="custom__text">Непродовольственные товары</p>
+                <div
+                v-for="category in categories"
+                :key="category.category"
+                class="category__card relative"
+                @click="goToProduct(category.category)"
+                >
+                    <img :src="category.icon" :alt="category.name">
+                    <p v-if="showCategoryName" class="custom__text">{{ category.name }}</p>
                 </div>
             </div>
         </div>
@@ -67,7 +24,23 @@
 
 
 <script lang="ts" setup>
+import {onMounted,ref } from 'vue'
+import { useRouter} from 'vue-router';
+import { categories } from '@/data/categories';
 
+const router = useRouter();
+const showCategoryName = ref(false);
+
+
+const goToProduct = (categoryId: string) => {
+    router.push(`/category/${categoryId}`);
+}
+
+onMounted(() => {
+    setTimeout(() => {
+        showCategoryName.value = true;
+    }, 150);
+})
 </script>
 
 <style lang="scss">
