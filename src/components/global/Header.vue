@@ -2,43 +2,45 @@
   <div class="bg-white py-4 px-[116px] md:px-[15px]">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-4 mr-6 md:mr-2">
-        <RouterLink to="/"><img class="max-h-8 max-w-10 md:max-w-12 md:max-h-10" src="@/assets/icons/Logo.svg" alt="" /></RouterLink>
+        <RouterLink to="/"><img class="max-h-8 max-w-10 md:max-w-12 md:max-h-10" src="@/assets/icons/Logo.svg" alt="" />
+        </RouterLink>
         <h4 class="text-custom-black font-bold text-lg md:hidden">Северяночка</h4>
       </div>
 
       <div class="flex items-center">
-        <div class="flex flex-1 ">
-          <RouterLink to="/catalog" >
-            <button class="py-2 px-3 w-[140px] md:w-[40px] md:h-[40px] flex gap-6 items-center bg-custom-green rounded">
+        <RouterLink to="/catalog">
+          <button class="py-2 px-3 w-[140px] md:w-[40px] md:h-[40px] flex gap-6 items-center bg-custom-green rounded">
             <img src="@/assets/icons/Menu.svg" alt="">
             <div>
               <h5 class="text-white md:hidden">Каталог</h5>
             </div>
-        </button>
-          </RouterLink>
-        <div class="relative flex-1">
-          <input 
-        type="text"
-        placeholder="Найти товар" 
-        class="ml-4 py-2 px-2 w-[374px] md:w-[324px] rounded outline-none shadow-border" 
-        />
-        <img class="absolute right-1 top-1/4" src="@/assets/icons/search.svg" alt="">
-      </div>
+          </button>
+        </RouterLink>
+        <div class="relative">
+          <input type="text" placeholder="Найти товар"
+            class="ml-4 py-2 px-2 w-full rounded outline-none shadow-border" />
+          <img class="absolute right-1 top-1/4" src="@/assets/icons/search.svg" alt="">
         </div>
-    
+
         <div class="flex items-center gap-4 ml-10">
-          <div class="flex flex-col items-center cursor-pointer">
-            <img src="@/assets/icons/Favorites.svg" class="mb-2" alt="" />
-            <p class="text-xs text-custom-black">Избранное</p>
-          </div>
+          <RouterLink to="/favorites">
+            <div class="flex flex-col items-center cursor-pointer relative">
+              <img src="@/assets/icons/Favorites.svg" class="mb-2" alt="" />
+              <div v-if="favoritesCount > 0" class="absolute right-5  w-2 h-2 bg-orange-500 rounded">
+              </div>
+              <p class="text-xs text-custom-black">Избранное</p>
+            </div>
+          </RouterLink>
           <div class="flex flex-col items-center cursor-pointer">
             <img src="@/assets/icons/Orders.svg" class="mb-2" alt="" />
             <p class="text-xs text-custom-black">Заказы</p>
           </div>
-          <div class="flex flex-col items-center cursor-pointer">
+          <RouterLink to="/cart">
+            <div class="flex flex-col items-center cursor-pointer">
             <img src="@/assets/icons/shopping-cart.svg" class="mb-2" alt="" />
             <p class="text-xs text-custom-black">Корзина</p>
           </div>
+          </RouterLink>
         </div>
         <div class="flex items-center ml-6 gap-4">
           <img class="cursor-pointer" src="@/assets/icons/Avatar.svg" alt="" />
@@ -53,6 +55,15 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, watch } from 'vue';
+import { useFavoritesStore } from '../../../store/favorites/FavoritesProducts';
+import { storeToRefs } from 'pinia';
+
+const favoritesStore = useFavoritesStore();
+const { favorites } = storeToRefs(favoritesStore);
+
+const favoritesCount = computed(() => favorites.value.length)
+
 
 </script>
 

@@ -4,7 +4,7 @@ import type { ISProduct } from '../types/product'
 import { supabase } from '@/utils/supabaseClient'
 import { useLoadingStore } from '../store/loader'
 
-export const useStoreProducts = defineStore("products", () => {
+export const useProductsStore = defineStore("products", () => {
 
     const products: Ref<ISProduct[]> = vueRef([])
     const product: Ref<ISProduct | null> = vueRef(null);

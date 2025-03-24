@@ -13,13 +13,13 @@ import { defineProps, computed, onMounted, type PropType } from 'vue';
 import Card from '@/components/home/Cads/Card.vue';
 import type { ISProduct } from '../../../../types/product';
 
+
 defineProps(({
     products:{
         type:Array as PropType<ISProduct[]>,
         required:true,
     }
 }))
-
 </script>
 
 
@@ -27,7 +27,6 @@ defineProps(({
 .grid-card {
     display: grid;
     grid-template-columns:repeat(4,1fr); 
-    gap:45px
-
+    gap:45px;
 }
 </style>

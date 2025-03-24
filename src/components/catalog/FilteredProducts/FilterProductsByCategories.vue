@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div @keydown.enter="filterProductByCategoryAndFilters" class="w-full">
         <div class="bg-[#F3F2F1]">
             <h4 class="text-custom-black font-bold mb-10 text-lg p-2">Фильтр</h4>
         </div>
@@ -16,7 +16,7 @@
                 <input v-model="maxPriceRounded"
                     class="w-full outline-none py-2 px-4 rounded bg-white border border-[#BFBFBF]" type="text">
             </div>
-            <v-range-slider class="range-slider" :min="minPrice ?? 0" :max="maxPrice ?? 20000" v-model="price" strict />
+            <v-range-slider class="range-slider" :min="minPrice" :max="maxPrice" v-model="price" strict />
         </div>
         <div>
             <div class="flex items-center justify-between mb-4">
@@ -47,7 +47,7 @@
         </div>
         <div class="flex justify-center">
             <button @click="filterProductByCategoryAndFilters"
-                class="bg-[#FF6633] transition-all hover:bg-[#ea5b2b] text-white w-full py-2 rounded">Применить</button>
+                class="bg-[#FF6633] transition-all hover:bg-[#ea5b2b] text-white w-full py-4 rounded">Применить</button>
         </div>
     </div>
 </template>
@@ -56,63 +56,60 @@
 <script lang="ts" setup>
 import { minPriceRounded, maxPriceRounded, upadatePriceOnFiltered, minPrice, maxPrice, price } from '@/utils/price/priceUtils';
 import { minRatingRounded, maxRatingRounded, rating } from '@/utils/rating/ratingUtils';
-import { defineEmits, ref, computed, watch, onMounted } from 'vue';
+import { defineEmits, defineProps, ref, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLoadingStore } from '../../../../store/loader';
-import { useStoreProducts } from '../../../../store/products';
+import { useProductsStore } from '../../../../store/products';
+import type { ISProduct } from '../../../../types/product';
 
+const emit = defineEmits(['update-filtered-product']);
 
+const props = defineProps<{
+    initialProducts: ISProduct[];
+}>();
 
-const emit = defineEmits(['update-filtered-product','update-current-page']);
 const storeLoader = useLoadingStore();
-const storeProducts = useStoreProducts();
+const storeProducts = useProductsStore();
 
 const route = useRoute();
 
-
 const brand = ref('');
 const onSales = ref(false);
-const categoryId = route.params.id as string;
-const categoryFiltered = computed(() => storeProducts.products.filter(p => p.category_id === categoryId))
 
 
+const minPriceCategory = computed(() => Math.min(...targetProducts.value.map(p => p.price)))
+const maxPriceCategory = computed(() => Math.max(...targetProducts.value.map(p => p.price)))
 
-const filterProductByCategoryAndFilters = async () => {
-    try {
-        storeLoader.setLoading(true);
-        const filtered = categoryFiltered.value
-            .filter(p => {
-                const isPriceInRange = p.price >= price.value[0] && p.price <= price.value[1];
-                const isRatingInRange = p.rating >= rating.value[0] && p.rating <= rating.value[1];
-                const matchesBrand = brand.value ? p.brand.toLowerCase().includes(brand.value.toLowerCase().trim()) : true;
-                const isOnPromotion = onSales.value ? p.stock : true;
+const targetProducts = computed(()=> props.initialProducts)
 
-                return isPriceInRange && isRatingInRange && matchesBrand && isOnPromotion;
-            }).slice(0,6)
-        emit('update-current-page')
-        emit('update-filtered-product', filtered)
-        upadatePriceOnFiltered(categoryFiltered.value);
-    } finally {
-        storeLoader.setLoading(false);
-    }
+const filterProductByCategoryAndFilters = () => {
+    upadatePriceOnFiltered(targetProducts.value);
+    const filtered = targetProducts.value
+        .filter(p => {
+            return(
+                p.price >= price.value[0] &&
+                p.price <= price.value[1] &&
+                p.rating >= rating.value[0] &&
+                p.rating <= rating.value[1] &&
+                (brand.value? p.brand.toLowerCase().includes(brand.value.toLowerCase().trim()) : true) &&
+                (onSales.value ? p.stock : true)
+            )
+        })
+    emit('update-filtered-product', filtered)
 };
 
 
 const resetFilterOnPrice = () => {
-    upadatePriceOnFiltered(categoryFiltered.value);
-    emit('update-current-page')
+    price.value = [minPriceCategory.value, maxPriceCategory.value]
 }
 
 const resetFilterOnRating = () => {
-    minRatingRounded.value = 0;
-    maxRatingRounded.value = 5;
+    rating.value = [0, 5]
     rating.value = [minRatingRounded.value, maxRatingRounded.value]
-    emit('update-current-page')
 }
 
 const resetOnFilterBrand = () => {
     brand.value = '';
-    emit('update-current-page')
 }
 
 watch(() => route.params.id, async () => {
