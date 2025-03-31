@@ -1,26 +1,26 @@
 <template>
-    <div class="px-[116px] pt-[24px] pb-[80px]">
-        <Breadcrumbs v-if="!storeLoader.isLoading" :navigation="breadcrumbs"/>
-        <UITitle v-if="!storeLoader.isLoading" :title="`Избранное`" />
-        <div v-if="storeFavorites.favorites.length > 0" class="flex gap-10">
-            <FilterProductsByCategories v-show="!storeLoader.isLoading" :initial-products="storeFavorites.favorites"
-                @update-filtered-product="updateFilteredProducts" />
-            <div class="ml-10">
-                <div v-if="storeLoader.isLoading">
-                    <OverlayLoader />
-                </div>
-                <div v-else class="grid grid-cols-3 gap-10 mt-15">
-                    <Card v-for="item in displayedProducts" :key="item.id" :product="item" />
-                </div>
-                <div class="mt-auto">
-                    <Pagination :length="totalPage" v-model="currentPage" />
-                </div>
-            </div>
+  <div class="px-[116px] pt-[24px] pb-[80px] h-screen">
+    <Breadcrumbs v-if="!storeLoader.isLoading" :navigation="breadcrumbs" />
+    <UITitle v-if="!storeLoader.isLoading" :title="`Избранное`" />
+    <div v-if="storeFavorites.favorites.length > 0" class="flex gap-10">
+      <FilterProductsByCategories v-show="!storeLoader.isLoading" :initial-products="storeFavorites.favorites"
+        @update-filtered-product="updateFilteredProducts" />
+      <div class="ml-10">
+        <div v-if="storeLoader.isLoading">
+          <OverlayLoader />
         </div>
-        <div class="flex justify-center items-center min-h-screen" v-else>
-                <p class="text-6xl text-orange-400">У вас пока нет закладок😢</p>
+        <div v-else class="grid grid-cols-3 gap-10 mt-15">
+          <Card v-for="item in displayedProducts" :key="item.id" :product="item" />
         </div>
+        <div class="mt-auto">
+          <Pagination :length="totalPage" v-model="currentPage" />
+        </div>
+      </div>
     </div>
+    <div class="flex justify-center items-center h-full" v-else>
+      <p class="text-8xl font-medium text-custom-black">У вас пока нет закладок❤️</p>
+    </div>
+  </div>
 </template>
 
 
@@ -47,57 +47,57 @@ const filteredProducts = ref<ISProduct[]>([]);
 
 
 const totalPage = computed(() => {
-    return Math.ceil(filteredProducts.value.length / itemsPerPage);
+  return Math.ceil(filteredProducts.value.length / itemsPerPage);
 });
 
 
 const displayedProducts = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    return filteredProducts.value.slice(start, end);
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredProducts.value.slice(start, end);
 });
 
 
 const updateFilteredProducts = (filtered: ISProduct[]) => {
-    filteredProducts.value = filtered;
-    currentPage.value = 1;
+  filteredProducts.value = filtered;
+  currentPage.value = 1;
 }
 
 watch(() => storeFavorites.favorites, (newFavorites) => {
-    console.log('Избранные товары обновлены', newFavorites)
-    filteredProducts.value = [...newFavorites]
-    currentPage.value = 1;
+  console.log('Избранные товары обновлены', newFavorites)
+  filteredProducts.value = [...newFavorites]
+  currentPage.value = 1;
 },
-    { deep: true }
+  { deep: true }
 )
 
 
-const breadcrumbs = computed(()=>{
-  return[
+const breadcrumbs = computed(() => {
+  return [
     { name: 'Главная', to: '/' },
     { name: 'Избранное' }
   ]
 
 })
 
-watch(breadcrumbs,(newCrumbs) => {
-    console.log('Новые крошки', newCrumbs)
+watch(breadcrumbs, (newCrumbs) => {
+  console.log('Новые крошки', newCrumbs)
 })
 
 onMounted(async () => {
-    try {
-        const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        console.log('Загруженные избранные товары из locallyStorage', savedFavorites)
+  try {
+    const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    console.log('Загруженные избранные товары из locallyStorage', savedFavorites)
 
-        if (savedFavorites.length > 0) {
-            storeFavorites.favorites = savedFavorites
-        }
-
-        filteredProducts.value = [...storeFavorites.favorites]
-
-    } catch (e) {
-        console.error('Ошибка при загрузке избранных товаров', e)
+    if (savedFavorites.length > 0) {
+      storeFavorites.favorites = savedFavorites
     }
+
+    filteredProducts.value = [...storeFavorites.favorites]
+
+  } catch (e) {
+    console.error('Ошибка при загрузке избранных товаров', e)
+  }
 })
 
 

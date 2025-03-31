@@ -20,21 +20,29 @@
             <p class="leading-6 text-2xl text-custom-black">{{ checkingTextLength(product.description) }}</p>
             <v-rating class="flex-wrap" half-increments readonly :length="5" :size="40" :model-value="product.rating" color="warning"
                 active-color="warning" />
-            <button @click.stop
+            <button
+            @click="cartStore.addProduct(product), showModal = true"
+            @click.stop
                 class="shadow-border rounded-sm text-xl text-custom-green transition-all hover:bg-[#ff6633] hover:shadow-inherit hover:text-white py-4 w-full">В
                 корзину</button>
         </div>
     </div>
+    <Dialog v-model="showModal"/>
 </template>
 
 <script lang="ts" setup>
 import { Icon as Iconify } from '@iconify/vue';
 import { useRouter, useRoute } from 'vue-router';
+import Dialog from '@/components/UI/Dialog.vue';
 import type { ISProduct } from '../../../types/product';
-import { type PropType, defineProps, computed } from 'vue';
+import { type PropType, defineProps, computed, ref } from 'vue';
 import { useFavoritesStore } from '../../../../store/favorites/FavoritesProducts';
+import { useCartStore } from '../../../../store/cart/addInCart';
 
 const favoritesStore = useFavoritesStore();
+const cartStore = useCartStore();
+
+const showModal = ref(false)
 
 
 const isFavorite = computed(() => {

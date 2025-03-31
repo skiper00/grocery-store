@@ -31,7 +31,7 @@
             </div>
             <button
               class="flex w-full p-4 items-center transition-colors bg-[#FF6633] hover:bg-[#e15628] text-2xl text-white rounded">
-              <Iconify class="mr-[25%]" icon="bitcoin-icons:cart-outline" width="42" height="42" color="white" />
+              <Iconify @click="cartStore.addProduct(productStore.product.id)" class="mr-[25%]" icon="bitcoin-icons:cart-outline" width="42" height="42" color="white" />
               В корзину
             </button>
             <div class="flex flex-col gap-4 mt-10">
@@ -74,6 +74,7 @@ import Loader from '@/components/UI/utils/loaders/RatingLoader.vue';
 import { Icon as Iconify } from '@iconify/vue';
 import { onMounted, computed, watch, ref } from 'vue';
 import { useProductsStore } from '../../../store/products';
+import { useCartStore } from '../../../store/cart/addInCart';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router'
 import { useLoadingStore } from '../../../store/loader';
@@ -82,6 +83,7 @@ const loaderStore = useLoadingStore();
 const route = useRoute();
 const router = useRouter();
 const productStore = useProductsStore()
+const cartStore = useCartStore();
 
 
 const breadcrumbs = ref<{ name: string, to: string }[]>([{ name: 'Главная', to: '/' }]);
@@ -110,7 +112,6 @@ const goToProduct = (productsId: string) => {
 }
 
 const updateBreadcrumbs = async () => {
-  const productStore = useProductsStore();
   const product = productStore.product;
   if (product) {
     breadcrumbs.value = [

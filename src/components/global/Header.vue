@@ -28,7 +28,7 @@
               <img src="@/assets/icons/Favorites.svg" class="mb-2" alt="" />
               <div v-if="favoritesCount > 0" class="absolute right-5  w-2 h-2 bg-orange-500 rounded">
               </div>
-              <p class="text-xs text-custom-black">Избранное</p>
+              <p :class="[{ 'active-link': $route.path === '/favorites' }, 'text-xs text-custom-black']">Избранное</p>
             </div>
           </RouterLink>
           <div class="flex flex-col items-center cursor-pointer">
@@ -36,10 +36,12 @@
             <p class="text-xs text-custom-black">Заказы</p>
           </div>
           <RouterLink to="/cart">
-            <div class="flex flex-col items-center cursor-pointer">
-            <img src="@/assets/icons/shopping-cart.svg" class="mb-2" alt="" />
-            <p class="text-xs text-custom-black">Корзина</p>
-          </div>
+            <div class="relative flex flex-col items-center cursor-pointer">
+              <img src="@/assets/icons/shopping-cart.svg" class="mb-2" alt="" />
+              <p :class="[{ 'active-link': $route.path === '/cart' }, 'text-xs text-custom-black']">Корзина</p>
+              <div class="absolute right-[11px] -top-[15%] px-1 bg-[#FF6633] rounded-lg text-center text-xs text-white">
+                {{ cartStore.cartLength }}</div>
+            </div>
           </RouterLink>
         </div>
         <div class="flex items-center ml-6 gap-4">
@@ -55,21 +57,34 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, watch } from 'vue';
+import { computed, inject, onMounted, ref, watch, type Ref, defineProps, defineEmits } from 'vue';
 import { useFavoritesStore } from '../../../store/favorites/FavoritesProducts';
+import { useCartStore } from '../../../store/cart/addInCart';
 import { storeToRefs } from 'pinia';
 
+
+const showModal = inject('showModal') as Ref<boolean>
+
 const favoritesStore = useFavoritesStore();
+const cartStore = useCartStore();
 const { favorites } = storeToRefs(favoritesStore);
 
 const favoritesCount = computed(() => favorites.value.length)
 
 
+onMounted(() => {
+  cartStore.localStorageInitCart()
+})
+
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // input {
 //   border-width: 1px;
 //   border-style: solid;
 // }
+
+.active-link {
+  color: #FF6633;
+}
 </style>
