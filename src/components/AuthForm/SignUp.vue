@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import { supabase } from '@/utils/supabaseClient';
 import { emailValidation } from '@/utils/validation/emailValidation';
-import { computed, inject, reactive, type Ref } from 'vue';
+import { computed, inject, onMounted, reactive, type Ref } from 'vue';
 import { useCartStore } from '../../../store/cart/addInCart';
 import { useFavoritesStore } from '../../../store/favorites/FavoritesProducts';
 
@@ -66,24 +66,6 @@ const signUp = async () => {
       password: state.password
     })
 
-    const localCart = JSON.parse(localStorage.getItem('cart') || '[]')
-    const localFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
-
-    if (localCart.length > 0 || localFavorites.length > 0) {
-      try {
-        await Promise.all([
-          localCart.length > 0
-            ? cartStore.syncCartWithSupabase()
-            : Promise.reject(),
-          localFavorites.length > 0 ?
-            favoritesStore.syncFavoriteWithSupabase()
-            : Promise.reject()
-        ])
-      } catch (e) {
-        console.error('Ошибка при синхронизации данных', e)
-      }
-    }
-
 
     await cartStore.initCart()
     state.email = ''
@@ -96,6 +78,20 @@ const signUp = async () => {
   }
 }
 
+onMounted(async () => {
+  const localFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
+  const localCart = JSON.parse(localStorage.getItem('cart') || '[]')
 
+  if (localFavorites.length > 0 || localCart.length > 0) {
+    try {
+      await Promise.all([ localCart.length > 0 ? cartStore.syncCartWithSupabase() : Promise.resolve(),
+        localFavorites.length > 0 ? favoritesStore.syncFavoriteWithSupabase() : Promise.resolve()
+      ])
+    } catch (e) {
+      console.error('Ошибка при синхронизации данных', e)
+    }
+  }
+  await Promise.all([ cartStore.initCart(), favoritesStore.initFavorites() ])
+})
 
 </script>

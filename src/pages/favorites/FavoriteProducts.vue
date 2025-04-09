@@ -35,6 +35,7 @@ import Pagination from '@/components/UI/Pagination.vue';
 import { useLoadingStore } from '../../../store/loader/isLoader';
 import { useFavoritesStore } from '../../../store/favorites/FavoritesProducts'
 import type { ISProduct } from '../../../types/product';
+import { supabase } from '@/utils/supabaseClient';
 
 
 
@@ -77,7 +78,6 @@ const breadcrumbs = computed(() => {
     { name: 'Главная', to: '/' },
     { name: 'Избранное' }
   ]
-
 })
 
 watch(breadcrumbs, (newCrumbs) => {
@@ -85,19 +85,17 @@ watch(breadcrumbs, (newCrumbs) => {
 })
 
 onMounted(async () => {
-  try {
-    const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    console.log('Загруженные избранные товары из locallyStorage', savedFavorites)
+  const { data: { user } } = await supabase.auth.getUser()
 
-    if (savedFavorites.length > 0) {
-      storeFavorites.favorites = savedFavorites
+  if (user) {
+    try {
+      const localFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
+      storeFavorites.favorites = localFavorites
+    } catch (e) {
+      console.error('Ошибка загрузки избранного', e)
     }
-
-    filteredProducts.value = [...storeFavorites.favorites]
-
-  } catch (e) {
-    console.error('Ошибка при загрузке избранных товаров', e)
   }
+  await storeFavorites.initFavorites()
 })
 
 

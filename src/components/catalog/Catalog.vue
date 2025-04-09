@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-6 px-[116px] pb-[80px] h-screen">
+  <div class="pt-6 px-[116px] pb-[80px] h-full">
     <div class="wrapper">
       <h1 class="font-bold text-custom-black text-6xl mb-[60px]">Каталог</h1>
       <div class="container__grid">

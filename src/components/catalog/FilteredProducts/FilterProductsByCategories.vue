@@ -1,5 +1,5 @@
 <template>
-    <div @keydown.enter="filterProductByCategoryAndFilters" class="w-full">
+    <div @keydown.enter="filterProductByCategoryAndFilters" class="min-w-[272px]">
         <div class="bg-[#F3F2F1]">
             <h4 class="text-custom-black font-bold mb-10 text-lg p-2">Фильтр</h4>
         </div>

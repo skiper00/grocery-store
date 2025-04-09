@@ -21,7 +21,5 @@ const productStore = useProductsStore();
 
 const filterByStocks = computed(() => productStore.products.filter((j: ISProduct) => j.stock === true))
 
-onMounted(()=> {
 
-})
 </script>

@@ -55,23 +55,6 @@ const login = async () => {
       password: state.password
     })
 
-    const localFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
-    const localCart = JSON.parse(localStorage.getItem('cart') || '[]')
-
-    if (localFavorites.length > 0 || localCart.length > 0) {
-      try {
-        await Promise.all([
-          localCart.length > 0
-            ? cartStore.syncCartWithSupabase()
-            : Promise.reject(),
-          localFavorites.length > 0 ?
-            favoritesStore.syncFavoriteWithSupabase()
-            : Promise.reject()
-        ])
-      } catch (e) {
-        console.error('Ошибка при синхронизации данных', e)
-      }
-    }
 
     if (error?.message.includes('Email not confirmed')) {
       alert('Подтвердите почту')
@@ -93,11 +76,21 @@ const login = async () => {
 }
 
 
-// onMounted(async () => {
-//   const savedSession = localStorage.getItem('session');
-//   if (savedSession) {
+onMounted(async () => {
+  const localFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
+  const localCart = JSON.parse(localStorage.getItem('cart') || '[]')
 
-//   }
-// })
+  if (localFavorites.length > 0 || localCart.length > 0) {
+    try {
+      await Promise.all([
+        localCart.length > 0 ? cartStore.syncCartWithSupabase() : Promise.resolve(),
+        localFavorites.length > 0 ? favoritesStore.syncFavoriteWithSupabase() : Promise.resolve()
+      ])
+    } catch (e) {
+      console.error('Ошибка при синхронизации данных', e)
+    }
+  }
+  await Promise.all([ cartStore.initCart(), favoritesStore.initFavorites() ])
+})
 
 </script>

@@ -1,24 +1,18 @@
 import { defineStore } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
 import type { ISProduct } from '../../types/product'
-import { useProductsStore } from '../products/products'
 import { supabase } from '@/utils/supabaseClient';
 
 
 export const useFavoritesStore = defineStore('favorites', () => {
   const favorites = ref<ISProduct[]>([]);
-  const storeProducts = useProductsStore();
 
-  onMounted(async () => {
-    await initFavorites()
-  })
 
   const initFavorites = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-
     if (!user) {
-      const localFavorite = JSON.parse(localStorage.getItem('favorites') || '[]')
-      favorites.value = [...localFavorite]
+      const localCart = JSON.parse(localStorage.getItem('favorites') || '[]')
+      favorites.value = localCart;
       return;
     }
 
@@ -27,46 +21,49 @@ export const useFavoritesStore = defineStore('favorites', () => {
       .select('*')
       .eq('user_id', user.id)
 
+
     if (error) {
-      console.error('Ошибка загрузки избранных', error.message)
+      console.error('Ошибка загрузки корзина', error.message)
+      return;
     }
 
-    if (data) {
-      const products = await Promise.all(
-        data.map(async (item) => {
-          const { data: product } = await supabase
-            .from('products')
-            .select('*')
-            .eq('id', item.product_id)
-            .single()
-          return product ? { ...product } : null
-        })
-      )
-      favorites.value = products.filter(p => p !== null)
-    }
+    const products = await Promise.all(
+      data.map(async (item) => {
+        const { data: product } = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', item.product_id)
+          .single()
+        return product ? { ...product } : null
+      })
+    )
+    favorites.value = products.filter(p => p !== null)
   }
 
 
   const syncFavoriteWithSupabase = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+  const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-    const localFavorite = JSON.parse(localStorage.getItem('favorites') || '[]')
-    if(localFavorite.length === 0)
+      const localCart = JSON.parse(localStorage.getItem('favorites') || '[]')
 
-    await supabase.from('favorites').delete().eq('user_id', user.id)
+      await supabase.from('favorites').delete().eq('user_id', user.id)
 
-    if (localFavorite.length > 0) {
-      const favoriteToInsert = localFavorite.map((item) => ({
-        user_id: user.id,
-        product_id: item.id,
-      }))
-      await supabase.from('favorites').insert(favoriteToInsert)
-    }
+      if (localCart.length > 0) {
+        const favoritesToInsert = localCart.map((item: ISProduct) => ({
+          user_id: user.id,
+          product_id: item.id,
+        }))
+        await supabase.from('favorites').insert(favoritesToInsert)
+      }
 
-    localStorage.removeItem('favorites')
+      localStorage.removeItem('favorites')
 
-    await initFavorites()
+      await initFavorites()
+
+
+    localStorage.removeItem('favorites');
+    await initFavorites();
   }
 
   const addFavorite = async (product: ISProduct) => {
@@ -94,12 +91,13 @@ export const useFavoritesStore = defineStore('favorites', () => {
         })
 
         favorites.value.push({ ...product })
-
+        localStorage.setItem('favorites', JSON.stringify(favorites.value))
         console.log('Товар добавлен в избранное', product);
       } catch (e) {
         console.error('Error adding to favorites:', e);
       }
     }
+    await initFavorites()
   }
 
   const removeFavorite = async (productId: string) => {
@@ -118,9 +116,8 @@ export const useFavoritesStore = defineStore('favorites', () => {
 
       localStorage.setItem('favorites', JSON.stringify(favoriteUpdate));
 
-      favorites.value = [...favoriteUpdate]
+      favorites.value = favoriteUpdate
     }
-    await initFavorites()
   }
 
   return {

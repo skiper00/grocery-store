@@ -69,9 +69,9 @@ const toggleFavorite = (product: ISProduct) => {
   product.is_favorite = !product.is_favorite;
 
   if (product.is_favorite) {
-    storeFavorites.addFavorite(product);
-  } else {
     storeFavorites.removeFavorite(product.id);
+  } else {
+    storeFavorites.addFavorite(product);
   }
 }
 
@@ -85,12 +85,10 @@ const handleAddToCart = async () => {
     console.error('Ошибка при добавлении товара в корзину:', e)
   }
 }
-
-
 </script>
 
-<style lang="scss">
-.v-rating__wrapper {
+<style lang="scss" scoped>
+:deep(.v-rating__wrapper) {
   .v-rating__item {
     font-size: 25px;
   }

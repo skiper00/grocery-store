@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-6 pl-[116px] pr-[116px] pb-[120px] h-screen">
+  <div class="pt-6 pl-[116px] pr-[116px] pb-[120px] h-full">
     <Breadcrumbs :navigation="breadcrumbs" />
     <div v-if="productStore.product">
       <div class="mt-6">
@@ -63,6 +63,7 @@
         </div>
       </div>
     </div>
+    <ReviewsSection />
   </div>
   <div v-if="loaderStore.isLoading">
     <Loader />
@@ -70,6 +71,7 @@
 </template>
 
 <script lang="ts" setup>
+import  ReviewsSection  from '@/components/Reviews/ReviewsSection.vue'
 import Breadcrumbs from '@/components/UI/Breadcrumbs.vue';
 import Loader from '@/components/UI/utils/loaders/RatingLoader.vue';
 import { Icon as Iconify } from '@iconify/vue';

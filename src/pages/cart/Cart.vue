@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-[24px] px-[116px] pb-[80px] h-screen">
+  <div class="pt-[24px] px-[116px] pb-[80px] h-svh">
     <Breadcrumbs />
     <UITitle :title="'Корзина'" />
     <div class="flex gap-12">

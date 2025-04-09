@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <div class="bg-main-color h-full">
+    <div class="bg-main-color">
       <RouterView />
       <AuthModal />
     </div>
