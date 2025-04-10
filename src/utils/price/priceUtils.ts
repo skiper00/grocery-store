@@ -1,9 +1,9 @@
 import { ref, computed } from "vue";
-import type { ISProduct } from "../../../types/product";
+import type { InProduct } from "../../../types/product";
 
 const minPrice = ref<number>(0);
 const maxPrice = ref<number>(20000);
-const price = ref<number[]>([0,20000]);
+const price = ref<number[]>([0, 20000]);
 
 const roundToInteger = (value: number): number => {
     return Math.round(value);
@@ -27,7 +27,7 @@ const maxPriceRounded = computed({
     }
 })
 
-const upadatePriceOnFiltered = (filtered: ISProduct[]) => {
+const upadatePriceOnFiltered = (filtered: InProduct[]) => {
     if (filtered.length > 0) {
         minPrice.value = Math.min(...filtered.map(p => p.price))
         maxPrice.value = Math.max(...filtered.map(p => p.price))

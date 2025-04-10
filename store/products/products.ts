@@ -1,26 +1,26 @@
 import { defineStore } from "pinia";
 import { type Ref, ref as vueRef, computed } from 'vue';
-import type { ISProduct } from '../types/product'
+import type { InProduct } from '../types/product'
 import { supabase } from '@/utils/supabaseClient'
 import { useLoadingStore } from '../loader/isLoader'
 
 export const useProductsStore = defineStore("products", () => {
 
-    const products: Ref<ISProduct[]> = vueRef([])
-    const product: Ref<ISProduct | null> = vueRef(null);
+    const products: Ref<InProduct[]> = vueRef([])
+    const product: Ref<InProduct | null> = vueRef(null);
     const storeLoading = useLoadingStore();
 
-    const stockProducts: Ref<ISProduct[]> = computed(() => {
+    const stockProducts: Ref<InProduct[]> = computed(() => {
         const filteredStockProducts = products.value.filter(product => product.stock)
         return shuffleArray(filteredStockProducts).slice(0, 4)
     })
-    const newProducts: Ref<ISProduct[]> = computed(() => {
+    const newProducts: Ref<InProduct[]> = computed(() => {
         const filteredNewProducts = products.value.filter(product => !product.stock)
         return shuffleArray(filteredNewProducts).slice(0, 4)
     })
 
 
-    const shuffleArray = (arr: ISProduct[]): ISProduct[] => {
+    const shuffleArray = (arr: InProduct[]): InProduct[] => {
         for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [arr[i], arr[j]] = [arr[j], arr[i]];

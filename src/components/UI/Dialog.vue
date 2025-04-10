@@ -22,11 +22,11 @@
 
 <script lang="ts" setup>
 import { computed, defineProps, defineEmits } from 'vue';
-import type { ISProduct } from '../../../types/product';
+import type { InProduct } from '../../../types/product';
 
 defineProps<{
   modelValue: boolean;
-  product: ISProduct;
+  product: InProduct;
   wasInCart: boolean;
 }>();
 

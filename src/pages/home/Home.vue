@@ -32,7 +32,7 @@
 import { computed, onMounted, type Ref, ref } from 'vue';
 import CardList from '@/components/Product/CardList.vue';
 import Skeleton from '@/components/UI/Skeleton.vue';
-import type { ISProduct } from '../../../types/product';
+import type { InProduct } from '../../../types/product';
 import { useProductsStore } from '../../../store/products/products'
 import { useLoadingStore } from '../../../store/loader/isLoader';
 

@@ -34,7 +34,7 @@ import FilterProductsByCategories from '@/components/catalog/FilteredProducts/Fi
 import Pagination from '@/components/UI/Pagination.vue';
 import { useLoadingStore } from '../../../store/loader/isLoader';
 import { useFavoritesStore } from '../../../store/favorites/FavoritesProducts'
-import type { ISProduct } from '../../../types/product';
+import type { InProduct } from '../../../types/product';
 import { supabase } from '@/utils/supabaseClient';
 
 
@@ -43,7 +43,7 @@ const currentPage = ref(1);
 const itemsPerPage = 6;
 const storeLoader = useLoadingStore();
 const storeFavorites = useFavoritesStore();
-const filteredProducts = ref<ISProduct[]>([]);
+const filteredProducts = ref<InProduct[]>([]);
 
 
 
@@ -59,7 +59,7 @@ const displayedProducts = computed(() => {
 });
 
 
-const updateFilteredProducts = (filtered: ISProduct[]) => {
+const updateFilteredProducts = (filtered: InProduct[]) => {
   filteredProducts.value = filtered;
   currentPage.value = 1;
 }

@@ -14,9 +14,9 @@
 import { computed } from 'vue'
 import CardList from '@/components/Product/CardList.vue';
 import { useProductsStore } from '../../../store/products/products'
-import type { ISProduct } from '../../../types/product';
+import type { InProduct } from '../../../types/product';
 
 const productStore = useProductsStore();
 
-const filteredProducts = computed(() => productStore.products.filter((l: ISProduct) => !l.stock))
+const filteredProducts = computed(() => productStore.products.filter((l: InProduct) => !l.stock))
 </script>

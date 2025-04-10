@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
-import type { ISProduct } from '../../types/product'
+import type { InProduct } from '../../types/product'
 import { supabase } from '@/utils/supabaseClient';
 
 
 export const useFavoritesStore = defineStore('favorites', () => {
-  const favorites = ref<ISProduct[]>([]);
+  const favorites = ref<InProduct[]>([]);
 
 
   const initFavorites = async () => {
@@ -42,31 +42,31 @@ export const useFavoritesStore = defineStore('favorites', () => {
 
 
   const syncFavoriteWithSupabase = async () => {
-  const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
 
-      const localCart = JSON.parse(localStorage.getItem('favorites') || '[]')
+    const localCart = JSON.parse(localStorage.getItem('favorites') || '[]')
 
-      await supabase.from('favorites').delete().eq('user_id', user.id)
+    await supabase.from('favorites').delete().eq('user_id', user.id)
 
-      if (localCart.length > 0) {
-        const favoritesToInsert = localCart.map((item: ISProduct) => ({
-          user_id: user.id,
-          product_id: item.id,
-        }))
-        await supabase.from('favorites').insert(favoritesToInsert)
-      }
+    if (localCart.length > 0) {
+      const favoritesToInsert = localCart.map((item: InProduct) => ({
+        user_id: user.id,
+        product_id: item.id,
+      }))
+      await supabase.from('favorites').insert(favoritesToInsert)
+    }
 
-      localStorage.removeItem('favorites')
+    localStorage.removeItem('favorites')
 
-      await initFavorites()
+    await initFavorites()
 
 
     localStorage.removeItem('favorites');
     await initFavorites();
   }
 
-  const addFavorite = async (product: ISProduct) => {
+  const addFavorite = async (product: InProduct) => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       const localFavorite = JSON.parse(localStorage.getItem('favorites') || '[]')

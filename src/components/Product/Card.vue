@@ -32,7 +32,7 @@
 import { Icon as Iconify } from '@iconify/vue';
 import { useRouter, useRoute } from 'vue-router';
 import Dialog from '@/components/UI/Dialog.vue';
-import type { ISProduct } from '../../../types/product';
+import type { InProduct } from '../../../types/product';
 import { type PropType, defineProps, computed, ref } from 'vue';
 import { useFavoritesStore } from '../../../store/favorites/FavoritesProducts';
 import { useCartStore } from '../../../store/cart/addInCart';
@@ -58,13 +58,13 @@ const route = useRoute();
 
 const props = defineProps({
   product: {
-    type: Object as PropType<ISProduct>,
+    type: Object as PropType<InProduct>,
     required: true
   }
 })
 
 
-const toggleFavorite = (product: ISProduct) => {
+const toggleFavorite = (product: InProduct) => {
 
   product.is_favorite = !product.is_favorite;
 

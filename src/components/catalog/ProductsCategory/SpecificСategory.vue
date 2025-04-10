@@ -34,7 +34,7 @@ import { useLoadingStore } from '../../../../store/loader/isLoader';
 import { useRoute } from 'vue-router';
 import { categories } from '@/data/categories';
 import { ref, type Ref, watch, computed, onMounted, } from 'vue'
-import type { ISProduct } from '../../../../types/product';
+import type { InProduct } from '../../../../types/product';
 import { useUpdateFilterProducts } from '@/components/composable/useUpdateFilterProducts';
 
 
@@ -47,7 +47,7 @@ const currentPage = ref(1);
 const itemsPerPage = 6;
 const categoryName = ref('');
 const categoryId = route.params.id as string;
-const filteredProducts: Ref<ISProduct[]> = ref([]);
+const filteredProducts: Ref<InProduct[]> = ref([]);
 const categoryFiltered = computed(() => storeProducts.products.filter(p => p.category_id === categoryId))
 
 const { updateFilteredProducts } = useUpdateFilterProducts(filteredProducts, currentPage)

@@ -10,7 +10,7 @@
 import { ref, computed, defineProps, defineEmits, type Ref } from 'vue';
 import { useLoadingStore } from '../../../store/loader/isLoader';
 import { useProductsStore } from '../../../store/products';
-import type { ISProduct } from '../../../types/product';
+import type { InProduct } from '../../../types/product';
 
 const storeLoader = useLoadingStore();
 

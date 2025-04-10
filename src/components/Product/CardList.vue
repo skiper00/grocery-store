@@ -8,13 +8,13 @@
 <script lang="ts" setup>
 import { defineProps, PropType } from 'vue';
 import Card from '@/components/Product/Card.vue';
-import type { ISProduct } from '../../../types/product';
+import type { InProduct } from '../../../types/product';
 
 
 defineProps({
   products: {
-    type: Array as PropType<ISProduct[]>,
-    default: () => [] 
+    type: Array as PropType<InProduct[]>,
+    default: () => []
   }
 });
 

@@ -60,12 +60,12 @@ import { defineEmits, defineProps, ref, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLoadingStore } from '../../../../store/loader/isLoader';
 import { useProductsStore } from '../../../../store/products/products';
-import type { ISProduct } from '../../../../types/product';
+import type { InProduct } from '../../../../types/product';
 
 const emit = defineEmits(['update-filtered-product']);
 
 const props = defineProps<{
-    initialProducts: ISProduct[];
+    initialProducts: InProduct[];
 }>();
 
 const storeLoader = useLoadingStore();
@@ -80,18 +80,18 @@ const onSales = ref(false);
 const minPriceCategory = computed(() => Math.min(...targetProducts.value.map(p => p.price)))
 const maxPriceCategory = computed(() => Math.max(...targetProducts.value.map(p => p.price)))
 
-const targetProducts = computed(()=> props.initialProducts)
+const targetProducts = computed(() => props.initialProducts)
 
 const filterProductByCategoryAndFilters = () => {
     upadatePriceOnFiltered(targetProducts.value);
     const filtered = targetProducts.value
         .filter(p => {
-            return(
+            return (
                 p.price >= price.value[0] &&
                 p.price <= price.value[1] &&
                 p.rating >= rating.value[0] &&
                 p.rating <= rating.value[1] &&
-                (brand.value? p.brand.toLowerCase().includes(brand.value.toLowerCase().trim()) : true) &&
+                (brand.value ? p.brand.toLowerCase().includes(brand.value.toLowerCase().trim()) : true) &&
                 (onSales.value ? p.stock : true)
             )
         })
